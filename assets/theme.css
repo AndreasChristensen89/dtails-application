@@ -86,6 +86,17 @@
   display: none;
 }
 
+/* for the currency button */
+
+#currency-button {
+  background-color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 12px;
+  padding: 5px 12px;
+  margin: 30px auto;
+}
+
 .slick-slider {
   position: relative;
   display: block;

@@ -9685,3 +9685,25 @@ function removeImageLoadingAnimation(image) {
     imageWrapper.removeAttribute('data-image-loading-animation');
   }
 }
+
+// apiKey
+
+document.getElementById("currency-button").addEventListener("click", calculateUSD);
+
+function calculateUSD() {
+  var prices = document.getElementsByClassName("price-item price-item--");
+  // let dkkPrices = [];
+  for (let i = 0; i<prices.length; i++) {
+    calculate(prices[i].innerText.slice(0, -4));
+  }
+}
+
+function calculate(number) {
+  fetch(`https://v6.exchangerate-api.com/v6/a87573a8dc5da0f49d9f7f24/latest/DKK`)
+    .then(res => res.json())
+    .then(data => {
+      const rate = data.conversion_rates["USD"];
+      let text = `${number*rate} USD`;
+      console.log(text);
+    })
+}

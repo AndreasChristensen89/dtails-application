@@ -124,6 +124,10 @@
     {% endif %}
   </header>
 
+  <div>
+    <button id="currency-button">USD currency</button>
+  </div>
+
   <div class="page-width" id="Collection">
     {% if section.settings.layout == 'grid' %}
       {% case section.settings.grid %}
@@ -524,4 +528,26 @@
 }
 
 {% endschema %}
+
+<script>
+  document.getElementById("currency-button").addEventListener("click", calculateUSD);
+
+  function calculateUSD() {
+    prices = document.getElementsByClassName("price-item price-item--regular");
+    console.log(prices);
+    const prices = [];
+    // calculate();
+  }
+
+  function calculate() {
+    fetch(`https://v6.exchangerate-api.com/v6/a87573a8dc5da0f49d9f7f24/latest/DKK`)
+      .then(res => res.json())
+      .then(data => {
+        // console.log(data);
+        const rate = data.conversion_rates["USD"];
+        let text = `1 DKK = ${rate} USD`;
+        console.log(text);
+      })
+  }
+</script>
 
