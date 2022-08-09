@@ -103,3 +103,8 @@ The theme has a global JS helper, `formatMoney`, to format money for display. It
 
 # comments
 Hard coded the sale tag on the products. Tag is set on top left corner of the product picture
+
+Added onmouse event to image links in product-card-grid.liquid which activates a function
+
+Added a second image in product-template.liquid that uses the second picture. Second picture is stored in a div that is revealed on hover.
+CSS is added at the top of the theme.css file, and full-width-link's absolute position has been commented out in the same file.

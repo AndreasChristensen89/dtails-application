@@ -73,6 +73,19 @@
   - Remove `outline: none` from `.slick-dots li button`
 ==============================================================================*/
 /*================ Slick Slider SCSS ================*/
+
+/* For the second picture */
+.top, .bottom {
+  position: absolute;
+  display: block;
+  top: 0px;
+  left: 0px;
+}
+
+.reveal:hover .top {
+  display: none;
+}
+
 .slick-slider {
   position: relative;
   display: block;
@@ -1554,7 +1567,7 @@ a[href^="tel"] {
       margin-top: 55px; } }
 
 .full-width-link {
-  position: absolute;
+  /* position: absolute; */
   top: 0;
   right: 0;
   bottom: 0;
@@ -2343,6 +2356,8 @@ hr {
     top: 0; }
   .grid-view-item__image.lazyload {
     opacity: 0; }
+
+
 
 .list-view-item {
   margin-bottom: 22px; }
