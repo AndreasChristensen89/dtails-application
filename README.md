@@ -99,3 +99,7 @@ ___
 
 Product prices are always stored in cents. So a product with a price of 100.00 DKK, when accessed via liquid (`{{product.price}}`) will return 10000. You don't need to think about different variant prices (i.e. price_min and price_max). Just use product.price.
 The theme has a global JS helper, `formatMoney`, to format money for display. It can be accessed on the global `theme.Currency` object. It defaults to USD formatting, so you only need to pass the function money in cents.
+
+
+# comments
+Hard coded the sale tag on the products. Tag is set on top left corner of the product picture

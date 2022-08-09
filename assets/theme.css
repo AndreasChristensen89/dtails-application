@@ -2318,6 +2318,17 @@ hr {
     .grid-view-item__vendor {
       font-size: calc(((var(--font-size-base) - 3) / (var(--font-size-base))) * 1em); } }
 
+/* For the discount-price */
+.discount-price {
+  background-color: #b84754;
+  color: white;
+  max-width: 80px;
+  padding: 6px;
+  position: absolute;
+  z-index: 9999;
+  border-radius: 5px 10px 10px 10px;
+}
+
 .grid-view-item__image-wrapper {
   margin: 0 auto 15px;
   position: relative;

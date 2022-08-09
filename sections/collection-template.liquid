@@ -1,3 +1,4 @@
+
 {% case section.settings.grid %}
   {% when 2 %}
     {%- assign max_height = 530 -%}
@@ -16,7 +17,6 @@
 {% endif %}
 
 {% paginate collection.products by limit %}
-
 <div data-section-id="{{ section.id }}" data-section-type="collection-template">
   <header class="collection-header">
     {%- assign is_filter_by_available = false -%}
@@ -519,4 +519,16 @@
     }
   ]
 }
+
+
 {% endschema %}
+{%- if product.images.size > 1 -%}
+     {%- assign secondary_image = product.images[1] -%}
+     {%- assign secondary_img_url = secondary_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+     // Markup for secondary image here
+ {%- endif -%}
+<script>
+let myTest = '{{secondary_img_url}}';
+console.log(myTest);
+</script>
+

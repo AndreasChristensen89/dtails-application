@@ -17,8 +17,10 @@
   {%- assign img_url = preview_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
 
   <div class="product-card__image-with-placeholder-wrapper" data-image-loading-animation>
+    <div class="discount-price">ON SALE</div>
     <div class="grid-view-item__image-wrapper product-card__image-wrapper js">
       <div style="padding-top:{% unless preview_image == blank %}{{ 1 | divided_by: preview_image.aspect_ratio | times: 100 }}%{% else %}100%{% endunless %};">
+        
         <img class="grid-view-item__image lazyload"
               alt="{{ preview_image.alt }}"
               data-src="{{ img_url }}"
