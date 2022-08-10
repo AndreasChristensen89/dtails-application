@@ -530,47 +530,50 @@
 {% endschema %}
 
 <script>
-  document.getElementById("currency-button").addEventListener("click", calculateUSD);
-
   const pricesRegular = document.getElementsByClassName("price-item price-item--regular");
   const pricesSale = document.getElementsByClassName("price-item price-item--sale");
 
-  var currency = "DKK";
+  var toCurrency = 'USD';
+  var fromCurrency = 'DKK';
+
+  document.getElementById("currency-button").addEventListener("click", calculateUSD);
 
   function calculateUSD() {
-
-    if (currency === "DKK") {
-      button = document.getElementById("currency-button");
-      button.disabled = true;
-      button.style.cursor = "unset";
-      button.innerText = "Set to USD"
-
-    for (let i = 0; i < pricesRegular.length; i++) {
-      if (pricesRegular[i].innerText !== '\n') {
-        let price = parseFloat(pricesRegular[i].innerText.slice(0, -4).replaceAll(',', '.')).toFixed(2);
-        fetch(`https://v6.exchangerate-api.com/v6/a87573a8dc5da0f49d9f7f24/latest/DKK`)
+      // It didn't accept the fromCurrency variable in the API call unless I copied it here
+      let newToCurrency = toCurrency;
+      let button = document.getElementById("currency-button");
+      
+      // api call
+      fetch(`https://v6.exchangerate-api.com/v6/c11b9084e356e472896cad54/latest/${fromCurrency}`)
           .then(res => res.json())
           .then(data => {
-            const rate = data.conversion_rates["USD"];
-            let text = `${(price*rate).toFixed(2)} USD`;
-            pricesRegular[i].innerText = text;
+            const rate = data.conversion_rates[newToCurrency];
+            for (let i = 0; i < pricesRegular.length; i++) {
+              if (pricesRegular[i].innerText !== '\n') {
+                let price = parseFloat(pricesRegular[i].innerText.slice(0, -4).replaceAll(',', '.')).toFixed(2);
+                let text = `${(price*rate).toFixed(2)} ${newToCurrency}`;
+                pricesRegular[i].innerText = text;
+              }
+              
+            }
+            for (let i = 0; i < pricesSale.length; i++) {
+              if (pricesSale[i].innerText != '\n') {
+                let price = parseFloat(pricesSale[i].innerText.slice(0, -4).replaceAll(',', '.')).toFixed(2);
+                let text = `${(price*rate).toFixed(2)} ${newToCurrency}`;
+                pricesSale[i].innerText = text;
+                }
+            }
         })
-      }
-      
-    }
-    for (let i = 0; i < pricesSale.length; i++) {
-      if (pricesSale[i].innerText != '\n') {
-        let price = parseFloat(pricesSale[i].innerText.slice(0, -4).replaceAll(',', '.')).toFixed(2);
-        fetch(`https://v6.exchangerate-api.com/v6/a87573a8dc5da0f49d9f7f24/latest/DKK`)
-            .then(res => res.json())
-            .then(data => {
-              const rate = data.conversion_rates["USD"];
-              let text = `${(price*rate).toFixed(2)} USD`;
-              pricesSale[i].innerText = text;
-          })
+        
+      if (toCurrency === "USD") {
+        toCurrency = "DKK";
+        fromCurrency = "USD";
+        button.innerText = "Set to DKK";
+      } else if (toCurrency === "DKK") {
+        toCurrency = "USD";
+        fromCurrency = "DKK";
+        button.innerText = "Set to USD";
         }
-    }
-  }
   }
 </script>
 
