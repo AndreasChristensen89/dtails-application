@@ -124,8 +124,8 @@
     {% endif %}
   </header>
 
-  <div>
-    <button id="currency-button">USD currency</button>
+  <div id="button-div">
+    <button type="button" id="currency-button">Change to USD</button>
   </div>
 
   <div class="page-width" id="Collection">
@@ -532,15 +532,23 @@
 <script>
   document.getElementById("currency-button").addEventListener("click", calculateUSD);
 
+  const pricesRegular = document.getElementsByClassName("price-item price-item--regular");
+  const pricesSale = document.getElementsByClassName("price-item price-item--sale");
+
+  var currency = "DKK";
+
   function calculateUSD() {
-    // let array = [];
-    let pricesRegular = document.getElementsByClassName("price-item price-item--regular");
-    let pricesSale = document.getElementsByClassName("price-item price-item--sale");
+
+    if (currency === "DKK") {
+      button = document.getElementById("currency-button");
+      button.disabled = true;
+      button.style.cursor = "unset";
+      button.innerText = "Set to USD"
 
     for (let i = 0; i < pricesRegular.length; i++) {
       if (pricesRegular[i].innerText !== '\n') {
-        let price = parseInt(pricesRegular[i].innerText.slice(0, 6));
-        // array.push(pricesRegular[i].innerText.slice(0, 6));
+        let price = parseFloat(pricesRegular[i].innerText.slice(0, -4).replaceAll(',', '.')).toFixed(2);
+        console.log(price);
         fetch(`https://v6.exchangerate-api.com/v6/a87573a8dc5da0f49d9f7f24/latest/DKK`)
           .then(res => res.json())
           .then(data => {
@@ -553,9 +561,8 @@
     }
     for (let i = 0; i < pricesSale.length; i++) {
       if (pricesSale[i].innerText != '\n') {
-        let price = parseInt(pricesSale[i].innerText.slice(0, 6));
+        let price = parseFloat(pricesSale[i].innerText.slice(0, -4).replaceAll(',', '.')).toFixed(2);
         console.log(price);
-        // array.push(pricesSale[i].innerText.slice(0, 6));
         fetch(`https://v6.exchangerate-api.com/v6/a87573a8dc5da0f49d9f7f24/latest/DKK`)
             .then(res => res.json())
             .then(data => {
@@ -565,18 +572,7 @@
           })
         }
     }
-
   }
-
-  function calculate() {
-    fetch(`https://v6.exchangerate-api.com/v6/a87573a8dc5da0f49d9f7f24/latest/DKK`)
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-        const rate = data.conversion_rates["USD"];
-        let text = `1 DKK = ${rate} USD`;
-        console.log(text);
-      })
   }
 </script>
 
