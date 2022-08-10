@@ -533,25 +533,35 @@
   const pricesRegular = document.getElementsByClassName("price-item price-item--regular");
   const pricesSale = document.getElementsByClassName("price-item price-item--sale");
 
+  // store the dkk prices
+  let dkkPricesRegular = [];
+  let dkkPricesSale = [];
+
+  for (let i = 0; i < pricesRegular.length; i++) {
+    dkkPricesRegular.push(pricesRegular[i].innerText);
+  }
+  for (let i = 0; i < pricesSale.length; i++) {
+    dkkPricesSale.push(pricesSale[i].innerText);
+  }
+
   var toCurrency = 'USD';
   var fromCurrency = 'DKK';
 
   document.getElementById("currency-button").addEventListener("click", calculateUSD);
 
   function calculateUSD() {
-      // It didn't accept the fromCurrency variable in the API call unless I copied it here
-      let newToCurrency = toCurrency;
       let button = document.getElementById("currency-button");
-      
+
+      if (toCurrency === "USD") {
       // api call
-      fetch(`https://v6.exchangerate-api.com/v6/c11b9084e356e472896cad54/latest/${fromCurrency}`)
+      fetch(`https://v6.exchangerate-api.com/v6/c11b9084e356e472896cad54/latest/DKK`)
           .then(res => res.json())
           .then(data => {
-            const rate = data.conversion_rates[newToCurrency];
+            const rate = data.conversion_rates['USD'];
             for (let i = 0; i < pricesRegular.length; i++) {
               if (pricesRegular[i].innerText !== '\n') {
                 let price = parseFloat(pricesRegular[i].innerText.slice(0, -4).replaceAll(',', '.')).toFixed(2);
-                let text = `${(price*rate).toFixed(2)} ${newToCurrency}`;
+                let text = `${(price*rate).toFixed(2)} ${toCurrency}`;
                 pricesRegular[i].innerText = text;
               }
               
@@ -559,11 +569,19 @@
             for (let i = 0; i < pricesSale.length; i++) {
               if (pricesSale[i].innerText != '\n') {
                 let price = parseFloat(pricesSale[i].innerText.slice(0, -4).replaceAll(',', '.')).toFixed(2);
-                let text = `${(price*rate).toFixed(2)} ${newToCurrency}`;
+                let text = `${(price*rate).toFixed(2)} ${toCurrency}`;
                 pricesSale[i].innerText = text;
                 }
             }
         })
+      } else {
+          for (let i = 0; i < pricesRegular.length; i++) {
+            pricesRegular[i].innerText = dkkPricesRegular[i];
+          }
+          for (let i = 0; i < pricesSale.length; i++) {
+            pricesSale[i].innerText = dkkPricesSale[i];
+          }
+      }
         
       if (toCurrency === "USD") {
         toCurrency = "DKK";
