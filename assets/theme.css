@@ -74,33 +74,6 @@
 ==============================================================================*/
 /*================ Slick Slider SCSS ================*/
 
-/* For the second picture */
-.top, .bottom {
-  position: absolute;
-  display: block;
-  top: 0px;
-  left: 0px;
-}
-
-.reveal:hover .top {
-  display: none;
-}
-
-/* for the currency button */
-
-/* #button-div {
-  margin: 0 auto;
-} */
-
-/* #currency-button {
-  background-color: white;
-  cursor: pointer;
-  border-radius: 5px;
-  font-size: 12px;
-  padding: 5px 12px;
-  margin: 30px auto;
-} */
-
 .slick-slider {
   position: relative;
   display: block;

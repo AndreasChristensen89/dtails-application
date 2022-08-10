@@ -536,7 +536,22 @@
 
 {% endschema %}
 
+<style>
+  /* For the second picture */
+.top, .bottom {
+  position: absolute;
+  display: block;
+  top: 0px;
+  left: 0px;
+}
+
+.reveal:hover .top {
+  display: none;
+}
+</style>
+
 <script>
+  // loop through the classes to obtain prices positions
   const pricesRegular = document.getElementsByClassName("price-item price-item--regular");
   const pricesSale = document.getElementsByClassName("price-item price-item--sale");
 
@@ -554,13 +569,18 @@
   var toCurrency = 'USD';
   var fromCurrency = 'DKK';
 
-  document.getElementById("currency-button").addEventListener("click", calculateUSD);
+  // verify element exists
+  var element = document.getElementById("currency-button");
+  if(typeof(element) != 'undefined' && element != null){
+    document.getElementById("currency-button").addEventListener("click", calculateUSD);
+  }
 
   function calculateUSD() {
       let button = document.getElementById("currency-button");
 
-      if (toCurrency === "USD") {
       // api call
+      // if USD then we use API, else we reinsert the stored DKK prices
+      if (toCurrency === "USD") {
       fetch(`https://v6.exchangerate-api.com/v6/c11b9084e356e472896cad54/latest/DKK`)
           .then(res => res.json())
           .then(data => {
@@ -589,7 +609,8 @@
             pricesSale[i].innerText = dkkPricesSale[i];
           }
       }
-        
+      
+      // switch variables to prepare for next click
       if (toCurrency === "USD") {
         toCurrency = "DKK";
         fromCurrency = "USD";
