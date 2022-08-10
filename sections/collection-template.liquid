@@ -588,7 +588,7 @@
             for (let i = 0; i < pricesRegular.length; i++) {
               if (pricesRegular[i].innerText !== '\n') {
                 let price = parseFloat(pricesRegular[i].innerText.slice(0, -4).replaceAll(',', '.')).toFixed(2);
-                let text = `${(price*rate).toFixed(2)} ${toCurrency}`;
+                let text = `${(price*rate).toFixed(2)} USD`;
                 pricesRegular[i].innerText = text;
               }
               
