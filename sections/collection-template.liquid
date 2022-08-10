@@ -548,7 +548,6 @@
     for (let i = 0; i < pricesRegular.length; i++) {
       if (pricesRegular[i].innerText !== '\n') {
         let price = parseFloat(pricesRegular[i].innerText.slice(0, -4).replaceAll(',', '.')).toFixed(2);
-        console.log(price);
         fetch(`https://v6.exchangerate-api.com/v6/a87573a8dc5da0f49d9f7f24/latest/DKK`)
           .then(res => res.json())
           .then(data => {
@@ -562,7 +561,6 @@
     for (let i = 0; i < pricesSale.length; i++) {
       if (pricesSale[i].innerText != '\n') {
         let price = parseFloat(pricesSale[i].innerText.slice(0, -4).replaceAll(',', '.')).toFixed(2);
-        console.log(price);
         fetch(`https://v6.exchangerate-api.com/v6/a87573a8dc5da0f49d9f7f24/latest/DKK`)
             .then(res => res.json())
             .then(data => {
