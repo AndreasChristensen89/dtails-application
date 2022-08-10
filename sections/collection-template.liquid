@@ -533,17 +533,46 @@
   document.getElementById("currency-button").addEventListener("click", calculateUSD);
 
   function calculateUSD() {
-    prices = document.getElementsByClassName("price-item price-item--regular");
-    console.log(prices);
-    const prices = [];
-    // calculate();
+    // let array = [];
+    let pricesRegular = document.getElementsByClassName("price-item price-item--regular");
+    let pricesSale = document.getElementsByClassName("price-item price-item--sale");
+
+    for (let i = 0; i < pricesRegular.length; i++) {
+      if (pricesRegular[i].innerText !== '\n') {
+        let price = parseInt(pricesRegular[i].innerText.slice(0, 6));
+        // array.push(pricesRegular[i].innerText.slice(0, 6));
+        fetch(`https://v6.exchangerate-api.com/v6/a87573a8dc5da0f49d9f7f24/latest/DKK`)
+          .then(res => res.json())
+          .then(data => {
+            const rate = data.conversion_rates["USD"];
+            let text = `${(price*rate).toFixed(2)} USD`;
+            pricesRegular[i].innerText = text;
+        })
+      }
+      
+    }
+    for (let i = 0; i < pricesSale.length; i++) {
+      if (pricesSale[i].innerText != '\n') {
+        let price = parseInt(pricesSale[i].innerText.slice(0, 6));
+        console.log(price);
+        // array.push(pricesSale[i].innerText.slice(0, 6));
+        fetch(`https://v6.exchangerate-api.com/v6/a87573a8dc5da0f49d9f7f24/latest/DKK`)
+            .then(res => res.json())
+            .then(data => {
+              const rate = data.conversion_rates["USD"];
+              let text = `${(price*rate).toFixed(2)} USD`;
+              pricesSale[i].innerText = text;
+          })
+        }
+    }
+
   }
 
   function calculate() {
     fetch(`https://v6.exchangerate-api.com/v6/a87573a8dc5da0f49d9f7f24/latest/DKK`)
       .then(res => res.json())
       .then(data => {
-        // console.log(data);
+        console.log(data);
         const rate = data.conversion_rates["USD"];
         let text = `1 DKK = ${rate} USD`;
         console.log(text);
