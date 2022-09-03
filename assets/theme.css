@@ -1555,7 +1555,7 @@ a[href^="tel"] {
       margin-top: 55px; } }
 
 .full-width-link {
-  /* position: absolute; */
+  position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
