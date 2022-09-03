@@ -8,13 +8,12 @@
     Usage:
     {% include 'product-card-grid', max_height: max_height, product: product, show_vendor: section.settings.show_vendor %}
 {% endcomment %}
-
+<div class="reveal">
 <div class="grid-view-item{% unless product.available %} grid-view-item--sold-out{% endunless %} product-card">
-  <div class="reveal">
+  
     <a class="grid-view-item__link grid-view-item__image-container full-width-link" href="{{ product.url }}">
       <span class="visually-hidden">{{ product.title }}</span>
     </a>
-  </div>
 
   {%- assign preview_image = product.featured_media.preview_image -%}
   {%- assign img_url = preview_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
@@ -63,4 +62,5 @@
 
   {% include 'product-price-listing', product: product, show_vendor: show_vendor %}
 
+</div>
 </div>
