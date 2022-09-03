@@ -10,10 +10,6 @@
 {% endcomment %}
 
 <div class="grid-view-item{% unless product.available %} grid-view-item--sold-out{% endunless %} product-card">
-  {% comment %} Link covers picture using a z-index, "blocking" the image.
-  Hover function won't work unless I put div above z-index
-  but then the link would't work
-  So, I covered the link in the div {% endcomment %}
   <div class="reveal">
     <a class="grid-view-item__link grid-view-item__image-container full-width-link" href="{{ product.url }}">
       <span class="visually-hidden">{{ product.title }}</span>
