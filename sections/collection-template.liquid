@@ -124,17 +124,6 @@
     {% endif %}
   </header>
 
-  <div id="button-div" style="text-align: center;">
-    <button type="button" id="currency-button" style="background-color: #5d96a7;
-      color: white;
-      cursor: pointer;
-      border-radius: 5px;
-      font-size: 12px;
-      padding: 5px 12px;
-      margin: 30px auto;
-      border: 1px solid black;">Set to USD</button>
-  </div>
-
   <div class="page-width" id="Collection">
     {% if section.settings.layout == 'grid' %}
       {% case section.settings.grid %}
@@ -545,6 +534,10 @@
   left: 0px;
 }
 
+.currency-button {
+    border-radius: 10px;
+}
+
 .bottom {
   opacity: 0;
 }
@@ -561,7 +554,7 @@
 
 @keyframes cover-text {
   from {
-      opacity: 0.8;
+      opacity: 0.0;
   }
 
   to {
