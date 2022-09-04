@@ -587,7 +587,7 @@ Overriding this as opacity 1 was preferred */
 <script>
 // after page load add eventlistener to currency button
 document.addEventListener('DOMContentLoaded', function () {
-  document.getElementById("currency-button").addEventListener("click", changeCurrency);
+  document.getElementById("currency-button").addEventListener("click", getCurrency);
 
   // adding class on mouseenter to avoid animation running on load
   for (element of document.getElementsByClassName('product-card')) {
@@ -597,76 +597,86 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
-function changeCurrency() {
+function getCurrency() {
+    // get the button and extract current currency
     let button = document.getElementById("currency-button");
     let currentCurrency = button.getAttribute("currency-value");
 
-    // get all elements
-    let elements = document.getElementsByClassName('price price--listing');
-
-    // if USD then we call API function, else we reinsert the stored DKK prices
+    // set rates according to currency
+    // if DKK to USD then we need API call
     if (currentCurrency === "DKK") {
-        setUSDRate(elements);
-        
+        getUSDRate();
         button.setAttribute("currency-value", "USD")
         button.innerText = "USD";
-        } 
+    }
+    // if USD then no need for conversion rate
+    // as we already have stored dkk prices in element attribute
     else if (currentCurrency === "USD") {
-        for (element of elements) {
-          let dkkPrice = theme.Currency.formatMoney(element.getAttribute("data-product-price"), theme.moneyFormat);
-          if (element.classList.contains("price--on-sale")) {
-                let parent;
-                for (const child of element.children) {
-                  if (child.classList.contains("price__sale")) {
-                    for (innerChild of child.children) {
-                      if (innerChild.tagName == "DD") {
-                        innerChild.children[0].innerText = dkkPrice;
-                      }
-                      if (innerChild.classList.contains("price__compare")) {
-                        let priceCompared = innerChild.getAttribute("data-compare-at-price");
-                        innerChild.children[1].children[0].innerText = theme.Currency.formatMoney(priceCompared, theme.moneyFormat);
-                      }
-                    }
-                  }
-                }
-              } else {
-                element.innerText = dkkPrice;
-              }
-          }
-          button.setAttribute("currency-value", "DKK")
-          button.innerText = "DKK";
+        changeCurrency(1, currentCurrency);
+        button.setAttribute("currency-value", "DKK")
+        button.innerText = "DKK";
     }
 }
 
-function setUSDRate(elements) {
-  fetch(`https://v6.exchangerate-api.com/v6/c11b9084e356e472896cad54/latest/DKK`)
+function changeCurrency(rate, currentCurrency) {
+    // get all products displayed
+    let elements = document.getElementsByClassName('price price--listing');
+    
+    // loop through products
+    for (element of elements) {
+      // get product price
+      let productPrice = element.getAttribute("data-product-price");
+
+      // set input price according to currency/rate
+      let formattedPrice;
+      if (currentCurrency === "DKK") {
+        formattedPrice = theme.Currency.formatMoney(productPrice * rate);
+      } else if (currentCurrency === "USD") {
+        formattedPrice = theme.Currency.formatMoney(element.getAttribute("data-product-price"), theme.moneyFormat);
+      }
+
+      // get all children of element
+      let children = element.querySelectorAll("*");
+
+      // if price is on sale...
+      if (element.classList.contains("price--on-sale")) {
+            
+            // go through descendants..
+            for (child of children) {
+              //  look for item--sale class for discounted price..
+              if (child.classList.contains('price-item--sale')) {
+                child.innerText = formattedPrice;
+              }
+              // and also change the compared price
+              if (child.classList.contains('price-item--regular')) {
+                let comparePrice = child.getAttribute("data-compare-at-price");
+                child.innerText = theme.Currency.formatMoney(comparePrice*rate);
+              }
+            }
+          } 
+          else 
+          {
+            // if product is not for sale..
+            for (child of children) {
+              // find following class and insert price
+              if (child.classList.contains('price-item--regular')) {
+                child.innerText = formattedPrice;
+                break;
+              }
+            }
+          }
+    }
+}
+
+
+async function getUSDRate() {
+  // asynchr call api to get conversion rate
+  let data = await fetch(`https://v6.exchangerate-api.com/v6/c11b9084e356e472896cad54/latest/DKK`)
           .then(res => res.json())
           .then(data => {
             let rate = data.conversion_rates['USD'];
-            for (element of elements) {
-              let dkkPrice = element.getAttribute("data-product-price");
-              let convertedPrice = dkkPrice * rate;
-              let formattedPrice = theme.Currency.formatMoney(convertedPrice);
-              if (element.classList.contains("price--on-sale")) {
-                let parent;
-                for (const child of element.children) {
-                  if (child.classList.contains("price__sale")) {
-                    for (innerChild of child.children) {
-                      if (innerChild.tagName == "DD") {
-                        innerChild.children[0].innerText = formattedPrice;
-                      }
-                      if (innerChild.classList.contains("price__compare")) {
-                        let priceCompared = innerChild.getAttribute("data-compare-at-price");
-                        let calculatedPrice = priceCompared*rate;
-                        innerChild.children[1].children[0].innerText = theme.Currency.formatMoney(calculatedPrice);
-                      }
-                    }
-                  }
-                }
-              } else {
-                element.innerText = formattedPrice;
-              }
-            }
+            // calls next function with rate and DKK
+            changeCurrency(rate, "DKK");        
         })
 }
 </script>
