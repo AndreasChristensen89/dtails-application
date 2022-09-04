@@ -526,38 +526,70 @@
 {% endschema %}
 
 <style>
-  /* For the picture switch with animation */
-  
-
+/* currency button */
 .currency-button {
     border-radius: 10px;
 }
 
-.reveal:hover .top {
+/* customizing own sale tag */
+.price__badges--listing .price__badge--new-sale {
+  font-size: 0.7em;
+}
+
+.price__badge--new-sale {
+  background-color: #b84754;
+  color: white;
+  border-radius: 10px;
+  border: 0px;
+  
+  line-height: unset; }
+  .price--on-sale .price__badge--new-sale {
+    display: flex; }
+  .price--sold-out .price__badge--new-sale {
+    display: none; }
+
+/* product card was set to opacity 0.8 by default
+Overriding this as opacity 1 was preferred */
+.product-card:hover .product-card__image-wrapper, .product-card:focus-within .product-card__image-wrapper {
+    opacity: 1;
+}
+
+/* For the picture switch with animation */
+.product-card:hover .grid-view-item__image--top {
     animation-name: top-animation;
-    animation-duration: 0.8s;
+    animation-duration: 0.6s;
     animation-fill-mode: forwards;
 }
 
-@keyframes top-animation {
-  0% { left: 0; opacity: 1;}
-  100% {left: -50px; opacity: 0;}
+.product-card:hover .grid-view-item__image--bottom {
+    animation-name: bottom-animation;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
 }
 
-.reveal:not(:hover) .top {
+.product-card:not(:hover) .grid-view-item__image--top {
     animation-name: top-animation-off;
-    animation-duration: 0.8s;
+    animation-duration: 0.6s;
+}
+
+@keyframes top-animation {
+  0% { opacity: 1;}
+  100% {opacity: 0;}
+}
+
+@keyframes bottom-animation {
+  0% { opacity: 0;}
+  100% { opacity: 1;}
 }
 
 @keyframes top-animation-off {
-  0% { left: -50px; opacity: 0;}
-  100% {left: 0; opacity: 1;}
+  0% { opacity: 0;}
+  100% { opacity: 1;}
 }
-
 </style>
 
 <script>
-// on load adds eventlistener to currency button
+// after page load add eventlistener to currency button
 document.addEventListener('DOMContentLoaded', function () {
   document.getElementById("currency-button").addEventListener("click", changeCurrency);
 });

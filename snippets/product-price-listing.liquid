@@ -117,9 +117,12 @@
     </dd>
   </div>
   <div class="price__badges price__badges--listing">
-    <span class="price__badge price__badge--sale" aria-hidden="true">
-      <span>{{ 'products.product.on_sale' | t }}</span>
-    </span>
+    {% comment %} <span class="price__badge price__badge--sale" aria-hidden="true">
+      <span>ON SALE</span>
+    </span> {% endcomment %}
+    <div class="price__badge price__badge--new-sale" aria-hidden="true">
+      <span>ON SALE</span>
+    </div>
     <span class="price__badge price__badge--sold-out">
       <span>{{ 'products.product.sold_out' | t }}</span>
     </span>

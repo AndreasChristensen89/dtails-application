@@ -8,9 +8,8 @@
     Usage:
     {% include 'product-card-grid', max_height: max_height, product: product, show_vendor: section.settings.show_vendor %}
 {% endcomment %}
-<div class="reveal">
+
 <div class="grid-view-item{% unless product.available %} grid-view-item--sold-out{% endunless %} product-card">
-  
     <a class="grid-view-item__link grid-view-item__image-container full-width-link" href="{{ product.url }}">
       <span class="visually-hidden">{{ product.title }}</span>
     </a>
@@ -26,13 +25,12 @@
   {%- endif -%}
 
   <div class="product-card__image-with-placeholder-wrapper" data-image-loading-animation>
-    <div class="discount-price">ON SALE</div>
     
     <div class="grid-view-item__image-wrapper product-card__image-wrapper js">
       <div style="padding-top:{% unless preview_image == blank %}{{ 1 | divided_by: preview_image.aspect_ratio | times: 100 }}%{% else %}100%{% endunless %};">
         
         
-          <img class="grid-view-item__image lazyload bottom"
+          <img class="grid-view-item__image lazyload grid-view-item__image--bottom"
                 alt="{{ preview_image.alt }}"
                 data-src="{{ secondary_img_url }}"
                 data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
@@ -41,7 +39,7 @@
                 data-image>
           
           {% comment %} Add additional img to hide behind main img {% endcomment %}
-          <img class="grid-view-item__image lazyload top"
+          <img class="grid-view-item__image lazyload grid-view-item__image--top"
                 alt="{{ preview_image.alt }}"
                 data-src="{{ img_url }}"
                 data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
@@ -62,5 +60,4 @@
 
   {% include 'product-price-listing', product: product, show_vendor: show_vendor %}
 
-</div>
 </div>
