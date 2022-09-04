@@ -606,21 +606,39 @@ function changeCurrency() {
 
     // if USD then we call API function, else we reinsert the stored DKK prices
     if (currentCurrency === "DKK") {
-        getCurrencyRate(elements);
+        setUSDRate(elements);
+        
         button.setAttribute("currency-value", "USD")
         button.innerText = "USD";
         } 
     else if (currentCurrency === "USD") {
         for (element of elements) {
           let dkkPrice = theme.Currency.formatMoney(element.getAttribute("data-product-price"), theme.moneyFormat);
-          element.innerText = dkkPrice;
+          if (element.classList.contains("price--on-sale")) {
+                let parent;
+                for (const child of element.children) {
+                  if (child.classList.contains("price__sale")) {
+                    for (innerChild of child.children) {
+                      if (innerChild.tagName == "DD") {
+                        innerChild.children[0].innerText = dkkPrice;
+                      }
+                      if (innerChild.classList.contains("price__compare")) {
+                        let priceCompared = innerChild.getAttribute("data-compare-at-price");
+                        innerChild.children[1].children[0].innerText = theme.Currency.formatMoney(priceCompared, theme.moneyFormat);
+                      }
+                    }
+                  }
+                }
+              } else {
+                element.innerText = dkkPrice;
+              }
           }
           button.setAttribute("currency-value", "DKK")
           button.innerText = "DKK";
     }
 }
 
-function getCurrencyRate(elements) {
+function setUSDRate(elements) {
   fetch(`https://v6.exchangerate-api.com/v6/c11b9084e356e472896cad54/latest/DKK`)
           .then(res => res.json())
           .then(data => {
@@ -629,7 +647,25 @@ function getCurrencyRate(elements) {
               let dkkPrice = element.getAttribute("data-product-price");
               let convertedPrice = dkkPrice * rate;
               let formattedPrice = theme.Currency.formatMoney(convertedPrice);
-              element.innerText = formattedPrice;
+              if (element.classList.contains("price--on-sale")) {
+                let parent;
+                for (const child of element.children) {
+                  if (child.classList.contains("price__sale")) {
+                    for (innerChild of child.children) {
+                      if (innerChild.tagName == "DD") {
+                        innerChild.children[0].innerText = formattedPrice;
+                      }
+                      if (innerChild.classList.contains("price__compare")) {
+                        let priceCompared = innerChild.getAttribute("data-compare-at-price");
+                        let calculatedPrice = priceCompared*rate;
+                        innerChild.children[1].children[0].innerText = theme.Currency.formatMoney(calculatedPrice);
+                      }
+                    }
+                  }
+                }
+              } else {
+                element.innerText = formattedPrice;
+              }
             }
         })
 }
