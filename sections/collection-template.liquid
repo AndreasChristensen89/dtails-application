@@ -533,63 +533,25 @@
     border-radius: 10px;
 }
 
-.bottom {
-  opacity: 0.5;
-}
-
 .reveal:hover .top {
-    animation-name: example;
-    animation-duration: 0.3s;
-    animation-iteration-count: 1;
-    animation-direction: forwards;
+    animation-name: top-animation;
+    animation-duration: 0.8s;
+    animation-fill-mode: forwards;
 }
 
-@keyframes example {
-    from {
-        transform: scale(1.0);
-    }
-
-    to {
-        transform: scale(0);
-    }
+@keyframes top-animation {
+  0% { left: 0; opacity: 1;}
+  100% {left: -50px; opacity: 0;}
 }
 
-.reveal:hover .bottom {
-    animation-name: Second;
-    animation-duration: 0.3s;
-    animation-iteration-count: 1;
-    animation-direction: forwards;
+.reveal:not(:hover) .top {
+    animation-name: top-animation-off;
+    animation-duration: 0.8s;
 }
 
-@keyframes Second {
-    from {
-        transform: scale(0);
-    }
-
-    to {
-        transform: scale(1.0);
-    }
-}
-
-@keyframes fade-out {
-  from {
-      opacity: 1;
-  }
-
-  to {
-      opacity: 0;
-      display: none;
-  }
-}
-
-@keyframes fade-in {
-  from {
-      opacity: 0.5;
-  }
-
-  to {
-      opacity: 1.0;
-  }
+@keyframes top-animation-off {
+  0% { left: -50px; opacity: 0;}
+  100% {left: 0; opacity: 1;}
 }
 
 </style>
@@ -607,31 +569,34 @@ function changeCurrency() {
     // get all elements
     let elements = document.getElementsByClassName('price price--listing');
 
-    // if USD then we use API, else we reinsert the stored DKK prices
+    // if USD then we call API function, else we reinsert the stored DKK prices
     if (currentCurrency === "DKK") {
-        let rate = getCurrencyRate();
-        for (element of elements) {
-          let dkkPrice = theme.Currency.formatMoney(element.getAttribute("data-product-price"));
-          element.innerText = `${dkkPrice*rate} USD`
-          }
-          button.setAttribute("currency-value", "USD")
+        getCurrencyRate(elements);
+        button.setAttribute("currency-value", "USD")
+        button.innerText = "USD";
         } 
     else if (currentCurrency === "USD") {
         for (element of elements) {
-          let dkkPrice = theme.Currency.formatMoney(element.getAttribute("data-product-price"));
-          element.innerText = `${dkkPrice} DKK`
+          let dkkPrice = theme.Currency.formatMoney(element.getAttribute("data-product-price"), theme.moneyFormat);
+          element.innerText = dkkPrice;
           }
           button.setAttribute("currency-value", "DKK")
+          button.innerText = "DKK";
     }
 }
 
-function getCurrencyRate() {
+function getCurrencyRate(elements) {
   fetch(`https://v6.exchangerate-api.com/v6/c11b9084e356e472896cad54/latest/DKK`)
           .then(res => res.json())
           .then(data => {
             let rate = data.conversion_rates['USD'];
+            for (element of elements) {
+              let dkkPrice = element.getAttribute("data-product-price");
+              let convertedPrice = dkkPrice * rate;
+              let formattedPrice = theme.Currency.formatMoney(convertedPrice);
+              element.innerText = formattedPrice;
+            }
         })
-  return rate
 }
 </script>
 
