@@ -567,7 +567,8 @@ Overriding this as opacity 1 was preferred */
     animation-fill-mode: forwards;
 }
 
-.product-card:not(:hover) .grid-view-item__image--top {
+/* class added by js on mouseenter as animation would trigger on load */
+.product-card__off:not(:hover) .grid-view-item__image--top {
     animation-name: top-animation-off;
     animation-duration: 0.6s;
 }
@@ -575,11 +576,6 @@ Overriding this as opacity 1 was preferred */
 @keyframes top-animation {
   0% { opacity: 1;}
   100% {opacity: 0;}
-}
-
-@keyframes bottom-animation {
-  0% { opacity: 0;}
-  100% { opacity: 1;}
 }
 
 @keyframes top-animation-off {
@@ -592,6 +588,13 @@ Overriding this as opacity 1 was preferred */
 // after page load add eventlistener to currency button
 document.addEventListener('DOMContentLoaded', function () {
   document.getElementById("currency-button").addEventListener("click", changeCurrency);
+
+  // adding class on mouseenter to avoid animation running on load
+  for (element of document.getElementsByClassName('product-card')) {
+    element.addEventListener('mouseenter', (event) => {
+      event.currentTarget.classList.add("product-card__off");
+    });
+  }
 });
 
 function changeCurrency() {
