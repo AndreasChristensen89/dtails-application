@@ -650,7 +650,11 @@ function changeCurrency(rate, currentCurrency) {
               // and also change the compared price
               if (child.classList.contains('price-item--regular')) {
                 let comparePrice = child.getAttribute("data-compare-at-price");
-                child.innerText = theme.Currency.formatMoney(comparePrice*rate);
+                if (currentCurrency == "DKK") {
+                  child.innerText = theme.Currency.formatMoney(comparePrice*rate);
+                } else if (currentCurrency == "USD") {
+                  child.innerText = theme.Currency.formatMoney(comparePrice*rate, theme.moneyFormat);
+                }
               }
             }
           } 
@@ -669,9 +673,9 @@ function changeCurrency(rate, currentCurrency) {
 }
 
 
-async function getUSDRate() {
-  // asynchr call api to get conversion rate
-  let data = await fetch(`https://v6.exchangerate-api.com/v6/c11b9084e356e472896cad54/latest/DKK`)
+function getUSDRate() {
+  // call api to get conversion rate
+  fetch(`https://v6.exchangerate-api.com/v6/c11b9084e356e472896cad54/latest/DKK`)
           .then(res => res.json())
           .then(data => {
             let rate = data.conversion_rates['USD'];
